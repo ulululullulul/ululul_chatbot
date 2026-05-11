@@ -12,17 +12,16 @@ st.write(
 )
 
 # 사용자에게 OpenAI API 키 입력받기
-# 또는 ./ .streamlit/secrets.toml 파일에 저장 후 st.secrets로 불러올 수도 있음
 openai_api_key = st.text_input("OpenAI API 키", type="password")
 
 if not openai_api_key:
-    st.info("계속하려면 OpenAI API 키를 입력해주세요.", icon="🗝️")
+    st.info("계속하려면 OpenAI API 키를 입력해주세요. 🌻", icon="🗝️")
 else:
 
     # OpenAI 클라이언트 생성
     client = OpenAI(api_key=openai_api_key)
 
-    # 세션 상태에 메시지 저장 (새로고침 시에도 유지)
+    # 세션 상태에 메시지 저장
     if "messages" not in st.session_state:
         st.session_state.messages = []
 
@@ -32,7 +31,7 @@ else:
             st.markdown(message["content"])
 
     # 채팅 입력창 생성
-    if prompt := st.chat_input("무엇이든 물어보세요!"):
+    if prompt := st.chat_input("무엇이든 물어보세요! 🌻"):
 
         # 사용자 메시지 저장 및 출력
         st.session_state.messages.append(
@@ -46,16 +45,29 @@ else:
         stream = client.chat.completions.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": m["role"], "content": m["content"]}
+                {
+                    "role": m["role"],
+                    "content": m["content"]
+                }
                 for m in st.session_state.messages
             ],
             stream=True,
         )
 
-        # 응답 스트리밍 출력 및 저장
+        # 응답 스트리밍 출력
         with st.chat_message("assistant"):
             response = st.write_stream(stream)
 
+        # 답변 끝에 해바라기 이모지 추가
+        response_with_flower = response + " 🌻"
+
+        # 다시 출력
+        st.markdown(response_with_flower)
+
+        # 세션에 저장
         st.session_state.messages.append(
-            {"role": "assistant", "content": response}
+            {
+                "role": "assistant",
+                "content": response_with_flower
+            }
         )
