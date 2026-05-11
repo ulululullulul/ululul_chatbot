@@ -37,44 +37,48 @@ st.markdown("""
         backdrop-filter: blur(6px);
     }
 
-    /* 입력창 */
+    /* 채팅 입력 영역 전체 */
     .stChatInputContainer {
-        background-color: transparent;
+        background-color: #FFE6D8;
         border-top: none;
+        padding: 14px;
+        border-radius: 24px 24px 0 0;
+        box-shadow: 0 -4px 14px rgba(255, 180, 140, 0.18);
     }
 
+    /* 채팅 입력 박스 */
     .stChatInputContainer > div {
-        background: rgba(255,255,255,0.72);
-        border: 2px solid #F4BCD3;
+        background: #FFF4EC;
+        border: 2px solid #F6C7AF;
         border-radius: 20px;
         padding: 6px 12px;
-        box-shadow: 0 4px 12px rgba(226,109,159,0.12);
+        box-shadow: 0 4px 10px rgba(255, 183, 128, 0.15);
     }
 
-    /* 텍스트 입력 필드 */
+    /* 입력 텍스트 */
     textarea {
-        color: #6B5B66 !important;
+        color: #7A5C52 !important;
         font-size: 15px !important;
     }
 
     textarea::placeholder {
-        color: #C597AE !important;
+        color: #C49A8A !important;
     }
 
     /* API 키 입력 필드 */
     .stTextInput input {
-        background-color: rgba(255,255,255,0.75);
-        border: 2px solid #F4BCD3;
+        background-color: #FFF4EC;
+        border: 2px solid #F6C7AF;
         border-radius: 14px;
-        color: #6B5B66;
+        color: #7A5C52;
         padding: 10px;
     }
 
-    /* 포커스 시 */
+    /* 포커스 효과 */
     .stTextInput input:focus,
     textarea:focus {
-        border-color: #E26D9F !important;
-        box-shadow: 0 0 0 0.15rem rgba(226,109,159,0.2);
+        border-color: #E8A87C !important;
+        box-shadow: 0 0 0 0.15rem rgba(232,168,124,0.25);
     }
 
     </style>
