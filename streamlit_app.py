@@ -1,73 +1,72 @@
 import streamlit as st
 from openai import OpenAI
 
-# 제목과 설명 표시
-st.title("💬 챗봇")
+# 페이지 제목
+st.title("🌸 탄생화 추천 AI 챗봇")
 st.write(
-    "이 챗봇은 OpenAI의 GPT-3.5 모델을 사용하여 응답을 생성합니다. "
-    "이 앱을 사용하려면 OpenAI API 키가 필요합니다. "
-    "API 키는 [여기](https://platform.openai.com/account/api-keys)에서 발급받을 수 있습니다. "
-    "또한 이 앱을 단계별로 만드는 방법은 "
-    "[공식 튜토리얼](https://docs.streamlit.io/develop/tutorials/llms/build-conversational-apps)에서 확인할 수 있습니다."
+    "생년월일을 입력하면 당신의 탄생화를 알려주는 AI 챗봇입니다. "
+    "탄생화의 의미와 꽃말도 함께 설명해드립니다."
 )
 
-# 사용자에게 OpenAI API 키 입력받기
+# API 키 입력
 openai_api_key = st.text_input("OpenAI API 키", type="password")
 
 if not openai_api_key:
-    st.info("계속하려면 OpenAI API 키를 입력해주세요. 🌻", icon="🗝️")
-else:
+    st.info("계속하려면 OpenAI API 키를 입력해주세요.", icon="🗝️")
 
+else:
     # OpenAI 클라이언트 생성
     client = OpenAI(api_key=openai_api_key)
 
-    # 세션 상태에 메시지 저장
+    # 채팅 기록 저장
     if "messages" not in st.session_state:
-        st.session_state.messages = []
+        st.session_state.messages = [
+            {
+                "role": "system",
+                "content": (
+                    "너는 사용자의 생년월일을 기반으로 탄생화를 알려주는 AI 챗봇이야. "
+                    "사용자가 생년월일을 입력하면 해당 날짜의 탄생화를 알려주고, "
+                    "꽃말과 특징, 어울리는 분위기를 친절하고 감성적으로 설명해줘. "
+                    "답변은 항상 한국어로 해줘."
+                ),
+            }
+        ]
 
-    # 기존 채팅 메시지 출력
+    # 이전 메시지 출력
     for message in st.session_state.messages:
-        with st.chat_message(message["role"]):
-            st.markdown(message["content"])
+        if message["role"] != "system":
+            with st.chat_message(message["role"]):
+                st.markdown(message["content"])
 
-    # 채팅 입력창 생성
-    if prompt := st.chat_input("무엇이든 물어보세요! 🌻"):
+    # 사용자 입력
+    if prompt := st.chat_input("생년월일을 입력해주세요! 예: 2004년 3월 15일"):
 
-        # 사용자 메시지 저장 및 출력
+        # 사용자 메시지 저장
         st.session_state.messages.append(
             {"role": "user", "content": prompt}
         )
 
+        # 사용자 메시지 출력
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # OpenAI API로 응답 생성
-        stream = client.chat.completions.create(
+        # GPT 응답 생성
+        response = client.chat.completions.create(
             model="gpt-3.5-turbo",
-            messages=[
-                {
-                    "role": m["role"],
-                    "content": m["content"]
-                }
-                for m in st.session_state.messages
-            ],
-            stream=True,
+            messages=st.session_state.messages,
         )
 
-        # 응답 스트리밍 출력
+        # 응답 내용 가져오기
+        bot_reply = response.choices[0].message.content
+
+        # 답변 끝에 해바라기 추가
+        bot_reply += " 🌻"
+
+        # 챗봇 메시지 출력
         with st.chat_message("assistant"):
-            response = st.write_stream(stream)
+            st.markdown(bot_reply)
 
-        # 답변 끝에 해바라기 이모지 추가
-        response_with_flower = response + " 🌻"
-
-        # 다시 출력
-        st.markdown(response_with_flower)
-
-        # 세션에 저장
+        # 응답 저장
         st.session_state.messages.append(
-            {
-                "role": "assistant",
-                "content": response_with_flower
-            }
+            {"role": "assistant", "content": bot_reply}
         )
