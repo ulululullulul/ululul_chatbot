@@ -1,9 +1,11 @@
 import streamlit as st
 from openai import OpenAI
 
-# 봄 느낌 배경 스타일
+# 봄 느낌 스타일 적용
 st.markdown("""
     <style>
+
+    /* 전체 배경 */
     .stApp {
         background: linear-gradient(
             to bottom,
@@ -13,17 +15,68 @@ st.markdown("""
         );
     }
 
+    /* 제목 */
     h1 {
         color: #E26D9F;
         text-align: center;
+        font-weight: 700;
     }
 
-    .stChatMessage {
-        background-color: rgba(255,255,255,0.7);
-        border-radius: 15px;
-        padding: 10px;
-        margin-bottom: 10px;
+    /* 설명 텍스트 */
+    p {
+        color: #6B5B66;
     }
+
+    /* 채팅 메시지 */
+    .stChatMessage {
+        background-color: rgba(255,255,255,0.72);
+        border-radius: 18px;
+        padding: 12px;
+        margin-bottom: 10px;
+        border: 1px solid rgba(255,255,255,0.5);
+        backdrop-filter: blur(6px);
+    }
+
+    /* 입력창 */
+    .stChatInputContainer {
+        background-color: transparent;
+        border-top: none;
+    }
+
+    .stChatInputContainer > div {
+        background: rgba(255,255,255,0.72);
+        border: 2px solid #F4BCD3;
+        border-radius: 20px;
+        padding: 6px 12px;
+        box-shadow: 0 4px 12px rgba(226,109,159,0.12);
+    }
+
+    /* 텍스트 입력 필드 */
+    textarea {
+        color: #6B5B66 !important;
+        font-size: 15px !important;
+    }
+
+    textarea::placeholder {
+        color: #C597AE !important;
+    }
+
+    /* API 키 입력 필드 */
+    .stTextInput input {
+        background-color: rgba(255,255,255,0.75);
+        border: 2px solid #F4BCD3;
+        border-radius: 14px;
+        color: #6B5B66;
+        padding: 10px;
+    }
+
+    /* 포커스 시 */
+    .stTextInput input:focus,
+    textarea:focus {
+        border-color: #E26D9F !important;
+        box-shadow: 0 0 0 0.15rem rgba(226,109,159,0.2);
+    }
+
     </style>
 """, unsafe_allow_html=True)
 
@@ -34,7 +87,7 @@ st.write(
     "생년월일을 입력하면 당신의 탄생화와 꽃말을 알려드립니다!"
 )
 
-# OpenAI API 키 입력
+# API 키 입력
 openai_api_key = st.text_input(
     "OpenAI API 키",
     type="password"
