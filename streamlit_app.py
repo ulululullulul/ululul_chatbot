@@ -1,6 +1,32 @@
 import streamlit as st
 from openai import OpenAI
 
+# 봄 느낌 배경 스타일
+st.markdown("""
+    <style>
+    .stApp {
+        background: linear-gradient(
+            to bottom,
+            #FFF4F8,
+            #FFE8F0,
+            #FFF9E6
+        );
+    }
+
+    h1 {
+        color: #E26D9F;
+        text-align: center;
+    }
+
+    .stChatMessage {
+        background-color: rgba(255,255,255,0.7);
+        border-radius: 15px;
+        padding: 10px;
+        margin-bottom: 10px;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 # 페이지 제목
 st.title("🌸 탄생화 추천 AI 챗봇")
 
